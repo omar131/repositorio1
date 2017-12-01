@@ -1,0 +1,70 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+<link rel="stylesheet" type="text/css" href="chat11.css">
+ <script src="https://code.jquery.com/jquery-1.11.3.js"></script>
+ <script>
+//var alumnosPorCodigo = {};
+
+function verificarUsuario() {
+	var usuario = {
+		"password": jQuery("#login_password").val(),
+		"nickname": jQuery("#login_nickname").val()
+	};
+
+	jQuery.ajax({method: "POST", url: "valida-usuario.json.php", data: JSON.stringify(usuario), dataType: 'text'}).done(function() {
+	//alert(responseText);
+		location.href = "index1.php";
+	});
+}
+
+function registrarNuevoUsuario() {
+  var usuario1 = {
+	"nickname": jQuery("#nickname_r").val(),
+	"password": jQuery("#password_r").val(),
+	"nombres":  jQuery("#nombres_r").val(),
+	"apellidos":  jQuery("#apellidos_r").val(),
+	"fecha_registro":  jQuery("#fecha_registro_r").val()
+  };
+  jQuery.ajax({method: "POST", url: "guardar-usuario.json.php", data: JSON.stringify(usuario1), dataType: 'text'}).done(function( responseText ) {
+	location.href ="index1.php";
+  });
+}
+</script>
+</head>
+
+<body background="fondo1.png">
+	<div class="imgcontainer">
+		<img src="thumb.png" alt="logo" class="logo">
+		
+	</div>
+
+
+	<div class="container">
+		 <h3>Iniciar Sesi&oacute;n</h3>
+		 <table id="nuevo-alumno">
+		  <tr><td>Nickname</td><td><input id="login_nickname" type="text" placeholder="ingrese usuario" value="name" /></td></tr>
+		  <tr><td>Password</td><td><input type="password" id="login_password" placeholder="ingrese password" /></td></tr>
+		 </table>
+	</div>
+	<div class="container" style="background-color:#f1f1f1">
+		 <button onclick="verificarUsuario()">Iniciar Sesi&oacute;n</button>
+	</div>
+
+	<div class="container2">
+
+	 <h3>Registro de Usuario</h3>
+	 <table id="nuevo-alumno">
+	  <tr><td>Nickname</td><td><input id="nickname_r" type="text" /></td></tr>
+	  <tr><td>Password</td><td><input type="password" id="password_r" /></td></tr>
+	  <tr><td>Nombres</td><td><input id="nombres_r" type="text" /></td></tr>
+	  <tr><td>Apellidos</td><td><input id="apellidos_r" type="text" /></td></tr>
+	  <tr><td>Fecha Registro</td><td><input id="fecha_registro_r" type="text" /></td></tr>
+	 </table>
+	 <button onclick="registrarNuevoUsuario()">Registrar</button>
+
+	</div>
+</body>
+
+</html>

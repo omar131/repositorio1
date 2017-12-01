@@ -1,0 +1,66 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+ <script src="https://code.jquery.com/jquery-1.11.3.js"></script>
+ <script>
+var usuariosPorId = {};
+
+function cargarUsuarios() {
+  jQuery.ajax({method: "GET", url: "usuarios.json.php", dataType: 'text'}).done(function( responseText ) {
+      var json = JSON.parse(responseText);
+      var html = "<tr><td>Codigo</td><td>Nombres</td></tr>";
+      for (var i=0; i<json.length; i++) {
+          html += "<tr onclick='editarUsuario(\"" + json[i].id + "\")'><td>" + json[i].id + "</td><td>";
+          html += json[i].nombres + "</td><td>";
+          html += json[i].apellidos + "</td><td>";
+          html += json[i].fecha_registro + "</td><td>";
+          html += "<button onclick='eliminarAlumno(\"" + json[i].id + "\")'>X</button></td></tr>";
+		  
+		  usuariosPorId[json[i].id] = json[i];
+      }
+      jQuery("#usuarios").html(html);
+  });
+}
+
+function guardarAlumno() {
+  var alumno = {
+	"codigo": jQuery("#codigo").val(),
+	"apellido_paterno": jQuery("#apellido_paterno").val(),
+	"nombres":  jQuery("#nombres").val(),
+	"fecha_nacimiento":  jQuery("#fecha_nacimiento").val()
+  };
+  jQuery.ajax({method: "POST", url: "guardar-alumno.json.php", data: JSON.stringify(alumno), dataType: 'text'}).done(function( responseText ) {
+	cargarUsuarios();
+	//alert(responseText);
+  });
+}
+
+
+function editarUsuario(codigo) {
+ var alumno = usuariosPorId[codigo];
+ jQuery("#codigo").val(alumno.codigo);
+ jQuery("#apellido_paterno").val(alumno.apellido_paterno);
+ jQuery("#nombres").val(alumno.nombres);
+ jQuery("#fecha_nacimiento").val(alumno.fecha_nacimiento)
+}
+
+function eliminarAlumno(codigo) {
+  jQuery.ajax({method: "GET", url: "eliminar-alumno.json.php?codigo=" + codigo, dataType: 'text'}).done(function( responseText ) {
+	cargarUsuarios();
+	//alert(responseText);
+  });
+}
+
+$( document ).ready(function() {
+	cargarUsuarios();
+});
+</script>
+</head>
+
+<body>
+ <table id="usuarios" border="1">
+ </table>
+</body>
+
+</html>
